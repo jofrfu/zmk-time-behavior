@@ -1,0 +1,4 @@
+description: Behavior zum Übernehmen der eingegebenen Uhrzeit
+compatible: "zmk,behavior-time-commit"
+
+include: no_params.yaml

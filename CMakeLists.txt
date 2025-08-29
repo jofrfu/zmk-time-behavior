@@ -1,0 +1,1 @@
+target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_TIME app PRIVATE src/behaviors/behavior_time.c)
