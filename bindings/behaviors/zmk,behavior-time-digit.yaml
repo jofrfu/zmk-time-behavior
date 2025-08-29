@@ -2,8 +2,3 @@ description: Behavior zum Eingeben einzelner Zeit-Ziffern
 compatible: "zmk,behavior-time-digit"
 
 include: one_param.yaml
-
-properties:
-  #binding-cells:
-    type: int
-    description: "Eine Ziffer (0-9), die in den Buffer geschrieben wird"
