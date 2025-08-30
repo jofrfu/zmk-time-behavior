@@ -9,6 +9,10 @@
 #include <stdlib.h>
 #include <zmk_behavior_time/rtc_time.h>
 
+struct rtc_state rtc = {0};
+char time_input_buffer[MAX_TIME_DIGITS + 1];
+int time_input_len = 0;
+
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
 // ---------- Helper  Function ----------
