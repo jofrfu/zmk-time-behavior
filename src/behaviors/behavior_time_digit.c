@@ -43,11 +43,11 @@ static int day_of_week(int year, int month, int day) {
         month += 12;
         year -= 1;
     }
-    int K = year % 100;
-    int J = year / 100;
-    int h = (day + 13*(month + 1)/5 + K + K/4 + J/4 + 5*J) % 7;
+    int K_local = year % 100;
+    int J_local = year / 100;
+    int h_local = (day + 13*(month + 1)/5 + K_local + K_local/4 + J_local/4 + 5*J_local) % 7;
     // h = 0 = Samstag, 1 = Sonntag, 2 = Montag, ...
-    int dow = ((h + 5) % 7); // umwandeln: 0=Montag, 6=Sonntag
+    int dow = ((h_local + 5) % 7); // umwandeln: 0=Montag, 6=Sonntag
     return dow;
 }
 
