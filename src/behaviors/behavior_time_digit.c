@@ -7,7 +7,7 @@
 #include <zephyr/sys/printk.h>
 #include <zmk/behavior.h>
 #include <stdlib.h>
-#include "rtc_time.h"
+#include <zmk/rtc_time.h>
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
