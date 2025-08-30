@@ -9,6 +9,7 @@ struct rtc_state {
     int hour;
     int minute;
     int second;
+    int dow; // Day of week 0-6
     int64_t uptime_ref;
 };
 

@@ -38,6 +38,19 @@ static int days_in_month(int year, int month) {
     }
 }
 
+static int day_of_week(int year, int month, int day) {
+    if (month < 3) {
+        month += 12;
+        year -= 1;
+    }
+    int K = year % 100;
+    int J = year / 100;
+    int h = (day + 13*(month + 1)/5 + K + K/4 + J/4 + 5*J) % 7;
+    // h = 0 = Samstag, 1 = Sonntag, 2 = Montag, ...
+    int dow = ((h + 5) % 7); // umwandeln: 0=Montag, 6=Sonntag
+    return dow;
+}
+
 // Append Digit
 static void append_digit(int digit) {
     if (time_input_len < MAX_TIME_DIGITS) {
@@ -92,6 +105,8 @@ void rtc_get_time(struct rtc_state *out) {
             }
         } else break;
     }
+
+    out->dow = day_of_week(out->year, out->month, out->day);
 }
 
 // ---------- Registrieren ----------
