@@ -1,4 +1,4 @@
-#define DT_DRV_COMPAT zmk_behavior_time
+#define DT_DRV_COMPAT zmk_behavior_time_digit
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
@@ -9,12 +9,7 @@
 #include <stdlib.h>
 #include "rtc_time.h"
 
-#define MAX_TIME_DIGITS 12 // YYYYMMDDHHMM
-
-static struct rtc_state rtc = {0};
-
-static char time_input_buffer[MAX_TIME_DIGITS + 1];
-static int time_input_len = 0;
+#if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
 // ---------- Helper  Function ----------
 static bool is_leap_year(int year) {
@@ -50,13 +45,6 @@ static void append_digit(int digit) {
     }
 }
 
-// Clear Input
-static void clear_input(void) {
-    time_input_len = 0;
-    time_input_buffer[0] = '\0';
-    printk("RTC Input cleared\n");
-}
-
 // ---------- Behavior: Digit ----------
 static int behavior_time_digit(struct zmk_behavior_binding *binding,
                                struct zmk_behavior_binding_event event) {
@@ -64,52 +52,6 @@ static int behavior_time_digit(struct zmk_behavior_binding *binding,
     if (digit >= 0 && digit <= 9) {
         append_digit(digit);
     }
-    return 0;
-}
-
-// ---------- Behavior: Clear ----------
-static int behavior_time_clear(struct zmk_behavior_binding *binding,
-                               struct zmk_behavior_binding_event event) {
-    clear_input();
-    return 0;
-}
-
-// ---------- Behavior: Commit ----------
-static int behavior_time_commit(struct zmk_behavior_binding *binding,
-                                struct zmk_behavior_binding_event event) {
-    if (time_input_len < MAX_TIME_DIGITS) {
-        printk("RTC Commit failed: not enough digits (%d/%d)\n", time_input_len, MAX_TIME_DIGITS);
-        return -EINVAL;
-    }
-
-    char buf[5];
-    memcpy(buf, &time_input_buffer[0], 4); buf[4] = '\0';
-    int year = atoi(buf);
-
-    memcpy(buf, &time_input_buffer[4], 2); buf[2] = '\0';
-    int month = atoi(buf);
-
-    memcpy(buf, &time_input_buffer[6], 2); buf[2] = '\0';
-    int day = atoi(buf);
-
-    memcpy(buf, &time_input_buffer[8], 2); buf[2] = '\0';
-    int hour = atoi(buf);
-
-    memcpy(buf, &time_input_buffer[10], 2); buf[2] = '\0';
-    int minute = atoi(buf);
-
-    rtc.year = year;
-    rtc.month = month;
-    rtc.day = day;
-    rtc.hour = hour;
-    rtc.minute = minute;
-    rtc.second = 0;
-    rtc.uptime_ref = k_uptime_get();
-
-    printk("RTC set to: %04d-%02d-%02d %02d:%02d\n",
-           year, month, day, hour, minute);
-
-    clear_input();
     return 0;
 }
 
@@ -153,22 +95,9 @@ static const struct behavior_driver_api behavior_time_digit_api = {
     .binding_pressed = behavior_time_digit,
 };
 
-static const struct behavior_driver_api behavior_time_clear_api = {
-    .binding_pressed = behavior_time_clear,
-};
-
-static const struct behavior_driver_api behavior_time_commit_api = {
-    .binding_pressed = behavior_time_commit,
-};
-
 BEHAVIOR_DT_INST_DEFINE(0, NULL, NULL, NULL, NULL,
                       POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
                       &behavior_time_digit_api);
 
-BEHAVIOR_DT_INST_DEFINE(0, NULL, NULL, NULL, NULL,
-                      POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
-                      &behavior_time_clear_api);
 
-BEHAVIOR_DT_INST_DEFINE(0, NULL, NULL, NULL, NULL,
-                      POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
-                      &behavior_time_commit_api);
+#endif
