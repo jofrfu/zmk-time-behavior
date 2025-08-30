@@ -5,6 +5,7 @@
 #include <zephyr/init.h>
 #include <zephyr/sys/printk.h>
 #include <zmk/behavior.h>
+#include <stdlib.h>
 #include "rtc_time.h"
 
 #define MAX_TIME_DIGITS 12 // YYYYMMDDHHMM
