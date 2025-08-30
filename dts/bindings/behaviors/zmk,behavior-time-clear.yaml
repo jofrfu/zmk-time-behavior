@@ -1,4 +1,4 @@
 description: Behavior zum Löschen des Eingabebuffers
 compatible: "zmk,behavior-time-clear"
 
-include: zero_params.yaml
+include: zero_param.yaml
