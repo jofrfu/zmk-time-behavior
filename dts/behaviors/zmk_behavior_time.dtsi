@@ -1,0 +1,26 @@
+/*
+ * Copyright (c) 2024 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <dt-bindings/zmk/behaviors.h>
+
+/ {
+    behaviors {
+        time_digit: behavior_time_digit {
+            compatible = "zmk,behavior-time-digit";
+            #binding-cells = <1>;
+        };
+
+        time_clear: behavior_time_clear {
+            compatible = "zmk,behavior-time-clear";
+            #binding-cells = <0>;
+        };
+
+        time_commit: behavior_time_commit {
+            compatible = "zmk,behavior-time-commit";
+            #binding-cells = <0>;
+        };
+    };
+};

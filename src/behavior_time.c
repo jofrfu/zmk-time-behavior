@@ -1,3 +1,5 @@
+#define DT_DRV_COMPAT zmk_behavior_time
+
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/init.h>
@@ -157,14 +159,14 @@ static const struct behavior_driver_api behavior_time_commit_api = {
     .binding_pressed = behavior_time_commit,
 };
 
-DEVICE_DT_INST_DEFINE(0, NULL, NULL, NULL, NULL,
-                      APPLICATION, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
+BEHAVIOR_DT_INST_DEFINE(0, NULL, NULL, NULL, NULL,
+                      POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
                       &behavior_time_digit_api);
 
-DEVICE_DT_INST_DEFINE(1, NULL, NULL, NULL, NULL,
-                      APPLICATION, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
+BEHAVIOR_DT_INST_DEFINE(0, NULL, NULL, NULL, NULL,
+                      POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
                       &behavior_time_clear_api);
 
-DEVICE_DT_INST_DEFINE(2, NULL, NULL, NULL, NULL,
-                      APPLICATION, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
+BEHAVIOR_DT_INST_DEFINE(0, NULL, NULL, NULL, NULL,
+                      POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,
                       &behavior_time_commit_api);
