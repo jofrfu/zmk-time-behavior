@@ -5,7 +5,7 @@
 #include <drivers/behavior.h>
 #include <zephyr/init.h>
 #include <zephyr/sys/printk.h>
-#include <zephyr/settings/settings.h>
+//#include <zephyr/settings/settings.h>
 #include <zmk/behavior.h>
 #include <stdlib.h>
 #include "behavior_time.h"
@@ -20,7 +20,7 @@ static void clear_input(void) {
 }
 
 // Save time persistently
-static int save_time_values(void) {
+/*static int save_time_values(void) {
     int err;
 
     err = settings_save_one("rtc/state", &rtc, sizeof(rtc));
@@ -31,10 +31,10 @@ static int save_time_values(void) {
 
     printk("Saved RTC time information.\n");
     return 0;
-}
+}*/
 
 // Load time after deep sleep
-static int settings_load_cb(const char *key, size_t len,
+/*static int settings_load_cb(const char *key, size_t len,
                             settings_read_cb read_cb, void *cb_arg)
 {
     if (strcmp(key, "state") == 0) {
@@ -46,7 +46,7 @@ static int settings_load_cb(const char *key, size_t len,
     return -ENOENT;
 }
 
-SETTINGS_STATIC_HANDLER_DEFINE(rtc, "rtc", NULL, settings_load_cb, NULL, NULL);
+SETTINGS_STATIC_HANDLER_DEFINE(rtc, "rtc", NULL, settings_load_cb, NULL, NULL);*/
 
 // ---------- Behavior: Commit ----------
 static int behavior_time_commit(struct zmk_behavior_binding *binding,
@@ -84,7 +84,7 @@ static int behavior_time_commit(struct zmk_behavior_binding *binding,
            year, month, day, hour, minute);
 
     clear_input();
-    save_time_values();
+    //save_time_values();
     return 0;
 }
 
