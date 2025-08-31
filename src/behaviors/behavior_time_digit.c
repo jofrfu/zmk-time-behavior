@@ -2,18 +2,38 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
+#include <zephyr/drivers/counter.h>
 #include <drivers/behavior.h>
 #include <zephyr/init.h>
 #include <zephyr/sys/printk.h>
 #include <zmk/behavior.h>
 #include <stdlib.h>
-#include <zmk_behavior_time/rtc_time.h>
+#include "behavior_time.h"
 
 struct rtc_state rtc = {0};
 char time_input_buffer[MAX_TIME_DIGITS + 1];
 int time_input_len = 0;
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
+
+// RTC
+#define RTC_NODE DT_NODELABEL(rtc0)
+const struct device *rtc_dev = DEVICE_DT_GET(RTC_NODE);
+
+uint32_t rtc_get_ticks(void) {
+    uint32_t val = 0;
+    int err = counter_get_value(rtc_dev, &val);
+    if (err) {
+        printk("RTC read error %d\n", err);
+    }
+    return val;
+}
+
+#define RTC_FREQ (32768 / (DT_PROP(RTC_NODE, prescaler) + 1))
+
+uint64_t rtc_ticks_to_ms(uint32_t ticks) {
+    return (uint64_t)ticks * 1000ULL / RTC_FREQ;
+}
 
 // ---------- Helper  Function ----------
 static bool is_leap_year(int year) {
@@ -74,7 +94,7 @@ static int behavior_time_digit(struct zmk_behavior_binding *binding,
 
 // ---------- Zeit berechnen ----------
 void rtc_get_time(struct rtc_state *out) {
-    int64_t diff_ms = k_uptime_get() - rtc.uptime_ref;
+    int64_t diff_ms = rtc_ticks_to_ms(rtc_get_ticks()) - rtc.uptime_ref;
     int add_seconds = diff_ms / 1000;
 
     *out = rtc;
