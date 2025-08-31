@@ -78,7 +78,7 @@ static int behavior_time_commit(struct zmk_behavior_binding *binding,
     rtc.hour = hour;
     rtc.minute = minute;
     rtc.second = 0;
-    rtc.uptime_ref = rtc_ticks_to_ms(rtc_get_ticks());
+    rtc.uptime_ref = k_uptime_get();//rtc_ticks_to_ms(rtc_get_ticks());
 
     printk("RTC set to: %04d-%02d-%02d %02d:%02d\n",
            year, month, day, hour, minute);

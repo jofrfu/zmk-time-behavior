@@ -2,7 +2,7 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
-#include <zephyr/drivers/counter.h>
+//#include <zephyr/drivers/counter.h>
 #include <drivers/behavior.h>
 #include <zephyr/init.h>
 #include <zephyr/sys/printk.h>
@@ -17,7 +17,7 @@ int time_input_len = 0;
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
 // RTC
-#define RTC_NODE DT_NODELABEL(rtc0)
+/*#define RTC_NODE DT_NODELABEL(rtc0)
 const struct device *rtc_dev = DEVICE_DT_GET(RTC_NODE);
 
 uint32_t rtc_get_ticks(void) {
@@ -33,7 +33,7 @@ uint32_t rtc_get_ticks(void) {
 
 uint64_t rtc_ticks_to_ms(uint32_t ticks) {
     return (uint64_t)ticks * 1000ULL / RTC_FREQ;
-}
+}*/
 
 // ---------- Helper  Function ----------
 static bool is_leap_year(int year) {
@@ -94,7 +94,8 @@ static int behavior_time_digit(struct zmk_behavior_binding *binding,
 
 // ---------- Zeit berechnen ----------
 void rtc_get_time(struct rtc_state *out) {
-    int64_t diff_ms = rtc_ticks_to_ms(rtc_get_ticks()) - rtc.uptime_ref;
+    //int64_t diff_ms = rtc_ticks_to_ms(rtc_get_ticks()) - rtc.uptime_ref;
+    int64_t diff_ms = k_uptime_get() - rtc.uptime_ref;
     int add_seconds = diff_ms / 1000;
 
     *out = rtc;

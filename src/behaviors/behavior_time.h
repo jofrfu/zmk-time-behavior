@@ -2,8 +2,8 @@
 
 #include <zmk_behavior_time/rtc_time.h>
 
-uint32_t rtc_get_ticks(void);
-uint64_t rtc_ticks_to_ms(uint32_t ticks);
+//uint32_t rtc_get_ticks(void);
+//uint64_t rtc_ticks_to_ms(uint32_t ticks);
 
 
 extern struct rtc_state rtc;
