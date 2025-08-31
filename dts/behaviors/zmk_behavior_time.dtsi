@@ -24,8 +24,3 @@
         };
     };
 };
-
-&rtc0 {
-    status = "okay";
-    prescaler = <31>;    /* 1024 Hz */
-};
