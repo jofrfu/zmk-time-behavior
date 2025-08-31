@@ -84,7 +84,7 @@ static int behavior_time_commit(struct zmk_behavior_binding *binding,
            year, month, day, hour, minute);
 
     clear_input();
-    save_time_values(&rtc);
+    save_time_values();
     return 0;
 }
 
