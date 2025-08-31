@@ -3,3 +3,4 @@ config ZMK_BEHAVIOR_TIME
     default y
     select COUNTER
     select COUNTER_RTC0
+    select CONFIG_BT_TICKER_EXT
