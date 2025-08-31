@@ -20,7 +20,7 @@ static void clear_input(void) {
 }
 
 // Save time persistently
-static void save_time_values(void) {
+static int save_time_values(void) {
     int err;
 
     err = settings_save_one("rtc/state", &rtc, sizeof(rtc));
@@ -30,6 +30,7 @@ static void save_time_values(void) {
     }
 
     printk("Saved RTC time information.\n");
+    return 0;
 }
 
 // Load time after deep sleep
