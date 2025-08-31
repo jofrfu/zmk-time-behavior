@@ -3,3 +3,4 @@ config ZMK_BEHAVIOR_TIME
     default y
     depends on COUNTER
     depends on COUNTER_RTC0
+    depends on BT_TICKER
