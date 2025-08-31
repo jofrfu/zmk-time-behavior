@@ -1,6 +1,6 @@
 config ZMK_BEHAVIOR_TIME
     bool "Enable time digit/commit/clear behavior"
     default y
-    depends on COUNTER
-    depends on COUNTER_RTC0
-    depends on BT_TICKER
+    select COUNTER
+    select COUNTER_RTC0
+    select BT_TICKER
