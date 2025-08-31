@@ -23,7 +23,7 @@ static void clear_input(void) {
 static void save_time_values(void) {
     int err;
 
-    err = settings_save_one("rtc/time", &rtc, sizeof(rtc));
+    err = settings_save_one("rtc/state", &rtc, sizeof(rtc));
     if (err) {
         printk("Failed to save time information (err %d)\n", err);
         return err;
@@ -36,7 +36,7 @@ static void save_time_values(void) {
 static int settings_load_cb(const char *key, size_t len,
                             settings_read_cb read_cb, void *cb_arg)
 {
-    if (strcmp(key, "time") == 0) {
+    if (strcmp(key, "state") == 0) {
         if (len == sizeof(rtc)) {
             read_cb(cb_arg, &rtc, sizeof(rtc));
         }
