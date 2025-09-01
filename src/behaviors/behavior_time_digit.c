@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include "behavior_time.h"
 
-struct rtc_state rtc = {0};
 char time_input_buffer[MAX_TIME_DIGITS + 1];
 int time_input_len = 0;
 
