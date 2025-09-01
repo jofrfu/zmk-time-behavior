@@ -12,41 +12,29 @@
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
+// RTC
+#define RTC_NODE DT_NODELABEL(rtc0)
+static const struct device *rtc_dev;
+
+static int rtc_init(const struct device *dev) {
+    rtc_dev = DEVICE_DT_GET(RTC_NODE);
+
+    if (!device_is_ready(rtc_dev)) {
+        printk("RTC not ready!\n");
+        return -ENODEV;
+    }
+
+    printk("RTC initialized!\n");
+    return 0;
+}
+SYS_INIT(rtc_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+
 // Clear Input
 static void clear_input(void) {
     time_input_len = 0;
     time_input_buffer[0] = '\0';
     printk("RTC Input cleared\n");
 }
-
-// Save time persistently
-static int save_time_values(void) {
-    int err;
-
-    err = settings_save_one("rtc/state", &rtc, sizeof(rtc));
-    if (err) {
-        printk("Failed to save time information (err %d)\n", err);
-        return err;
-    }
-
-    printk("Saved RTC time information.\n");
-    return 0;
-}
-
-// Load time after deep sleep
-static int settings_load_cb(const char *key, size_t len,
-                            settings_read_cb read_cb, void *cb_arg)
-{
-    if (strcmp(key, "state") == 0) {
-        if (len == sizeof(rtc)) {
-            read_cb(cb_arg, &rtc, sizeof(rtc));
-        }
-        return 0;
-    }
-    return -ENOENT;
-}
-
-SETTINGS_STATIC_HANDLER_DEFINE(rtc, "rtc", NULL, settings_load_cb, NULL, NULL);
 
 // ---------- Behavior: Commit ----------
 static int behavior_time_commit(struct zmk_behavior_binding *binding,
@@ -72,19 +60,25 @@ static int behavior_time_commit(struct zmk_behavior_binding *binding,
     memcpy(buf, &time_input_buffer[10], 2); buf[2] = '\0';
     int minute = atoi(buf);
 
-    rtc.year = year;
-    rtc.month = month;
-    rtc.day = day;
-    rtc.hour = hour;
-    rtc.minute = minute;
-    rtc.second = 0;
-    rtc.uptime_ref = rtc_ticks_to_ms(rtc_get_ticks());
+    struct rtc_time rtc = {
+        .tm_sec   = 0,
+        .tm_min   = minute,
+        .tm_hour  = hour,
+        .tm_mday  = day,
+        .tm_mon   = month,
+        .tm_year  = year,
+        .tm_wday  = -1,
+        .tm_yday  = -1,
+        .tm_isdst = -1,
+        .tm_nsec  = 0
+    };
+
+    rtc_set_time(rtc_dev, &rtc);
 
     printk("RTC set to: %04d-%02d-%02d %02d:%02d\n",
            year, month, day, hour, minute);
 
     clear_input();
-    save_time_values();
     return 0;
 }
 
