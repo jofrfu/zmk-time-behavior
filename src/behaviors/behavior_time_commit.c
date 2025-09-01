@@ -14,20 +14,7 @@
 
 // RTC
 #define RTC_NODE DT_NODELABEL(rtc0)
-static const struct device *rtc_dev;
-
-static int rtc_init(const struct device *dev) {
-    rtc_dev = DEVICE_DT_GET(RTC_NODE);
-
-    if (!device_is_ready(rtc_dev)) {
-        printk("RTC not ready!\n");
-        return -ENODEV;
-    }
-
-    printk("RTC initialized!\n");
-    return 0;
-}
-SYS_INIT(rtc_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+static const struct device *rtc_dev = DEVICE_DT_GET(RTC_NODE);
 
 // Clear Input
 static void clear_input(void) {
