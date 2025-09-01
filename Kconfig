@@ -1,4 +1,3 @@
 config ZMK_BEHAVIOR_TIME
     bool "Enable time digit/commit/clear behavior"
     default y
-    select RTC

@@ -2,27 +2,14 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
-#include <zephyr/drivers/rtc.h>
 #include <drivers/behavior.h>
 #include <zephyr/init.h>
 #include <zephyr/sys/printk.h>
-#include <zephyr/settings/settings.h>
 #include <zmk/behavior.h>
 #include <stdlib.h>
 #include "behavior_time.h"
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
-
-// RTC
-#define RTC_NODE DT_NODELABEL(rtc0)
-static const struct device *rtc_dev = DEVICE_DT_GET(RTC_NODE);
-
-// Clear Input
-static void clear_input(void) {
-    time_input_len = 0;
-    time_input_buffer[0] = '\0';
-    printk("RTC Input cleared\n");
-}
 
 // ---------- Behavior: Commit ----------
 static int behavior_time_commit(struct zmk_behavior_binding *binding,
@@ -48,20 +35,13 @@ static int behavior_time_commit(struct zmk_behavior_binding *binding,
     memcpy(buf, &time_input_buffer[10], 2); buf[2] = '\0';
     int minute = atoi(buf);
 
-    struct rtc_time rtc = {
-        .tm_sec   = 0,
-        .tm_min   = minute,
-        .tm_hour  = hour,
-        .tm_mday  = day,
-        .tm_mon   = month,
-        .tm_year  = year,
-        .tm_wday  = -1,
-        .tm_yday  = -1,
-        .tm_isdst = -1,
-        .tm_nsec  = 0
-    };
-
-    rtc_set_time(rtc_dev, &rtc);
+    rtc.year = year;
+    rtc.month = month;
+    rtc.day = day;
+    rtc.hour = hour;
+    rtc.minute = minute;
+    rtc.second = 0;
+    rtc.uptime_ref = k_uptime_get();
 
     printk("RTC set to: %04d-%02d-%02d %02d:%02d\n",
            year, month, day, hour, minute);

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <zmk_behavior_time/rtc_time.h>
+
+extern struct rtc_state rtc;
+
 #define MAX_TIME_DIGITS 12 // YYYYMMDDHHMM
 
 extern char time_input_buffer[MAX_TIME_DIGITS + 1];
