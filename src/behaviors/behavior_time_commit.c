@@ -3,13 +3,19 @@
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <drivers/behavior.h>
-#include <zephyr/init.h>
 #include <zephyr/sys/printk.h>
 #include <zmk/behavior.h>
 #include <stdlib.h>
 #include "behavior_time.h"
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
+
+// Clear Input
+static void clear_input(void) {
+    time_input_len = 0;
+    time_input_buffer[0] = '\0';
+    printk("RTC Input cleared\n");
+}
 
 // ---------- Behavior: Commit ----------
 static int behavior_time_commit(struct zmk_behavior_binding *binding,
