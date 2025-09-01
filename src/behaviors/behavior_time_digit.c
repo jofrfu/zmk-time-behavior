@@ -2,7 +2,6 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
-#include <zephyr/drivers/rtc.h>
 #include <drivers/behavior.h>
 #include <zephyr/init.h>
 #include <zephyr/sys/printk.h>
